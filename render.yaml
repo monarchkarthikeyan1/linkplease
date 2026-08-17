@@ -11,6 +11,6 @@ services:
       - key: PSEUDOGRAM_API_KEY
         sync: false
       - key: VERIFY_WEBHOOK_SIGNATURE
-        value: "true"
+        value: "false"
       - key: DB_PATH
         value: linkplease.db
