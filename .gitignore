@@ -1,5 +1,6 @@
 .env
 .new_secret
+test_signed_webhook.py
 *.db
 *.db-wal
 *.db-shm
