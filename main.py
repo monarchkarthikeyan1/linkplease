@@ -47,6 +47,17 @@ async def create_rule(rule_req: RuleCreate):
         logger.error(f"Error creating rule: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.post("/reset-test-database")
+async def reset_database():
+    conn = db.get_db()
+    with conn:
+        conn.execute("DELETE FROM user_rule_matches;")
+        conn.execute("DELETE FROM blocked_matches;")
+        conn.execute("DELETE FROM dm_tasks;")
+        conn.execute("DELETE FROM events;")
+        conn.execute("DELETE FROM rules;")
+    return {"status": "reset complete"}
+
 @app.post("/webhook")
 async def handle_webhook(request: Request, x_pseudogram_signature: str = Header(None, alias="X-PseudoGram-Signature")):
     raw_body = await request.body()
