@@ -40,7 +40,15 @@ Below is an honest, technical breakdown of edge cases, system limitations, and c
 
 ---
 
-### 6. SQLite Concurrency & Scaling Limitations at Ultra-High Scale
+### 6. Render Free Tier Ephemeral Storage & Container Spin-Down Behavior
+- **Condition**: Deployment on Render's Free Web Service tier (`plan: free`).
+- **Limitation**: Render's Free Web Service tier uses an ephemeral filesystem and spins down containers after 15 minutes of inactivity.
+- **Impact**: When the container spins down, restarts, or redeploys, the local SQLite database file (`linkplease.db`) resets. Previously created rules, event logs, and `/stats` history will clear upon container restart.
+- **Production Path**: In a production environment with persistent requirements, SQLite can be mounted to a Render Persistent Disk volume or migrated to a managed cloud database such as PostgreSQL.
+
+---
+
+### 7. SQLite Concurrency & Scaling Limitations at Ultra-High Scale
 - **Condition**: Scaling beyond single-instance deployment to multi-region worker clusters handling tens of millions of DMs per month.
 - **Limitation**: SQLite WAL mode supports high-performance concurrent readers and serialized single-writer transactions. Under ultra-high write concurrency across multiple distributed container instances, SQLite file locking can become a bottleneck.
 - **Production Path**: At scale, SQLite would be replaced with PostgreSQL (with `SELECT ... FOR UPDATE SKIP LOCKED`) or Redis Streams as the distributed persistent queue.
