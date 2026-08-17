@@ -65,16 +65,16 @@ async def handle_webhook(request: Request, x_pseudogram_signature: str = Header(
     # HMAC-SHA256 Webhook Signature Verification (Phase 1)
     if settings.VERIFY_WEBHOOK_SIGNATURE:
         if not x_pseudogram_signature:
-            logger.warning(f"Rejected webhook: Missing X-PseudoGram-Signature header. Headers: {dict(request.headers)}")
+            logger.warning("Rejected webhook: Missing X-PseudoGram-Signature header.")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing signature header")
 
         if not x_pseudogram_signature.startswith("sha256="):
-            logger.warning(f"Rejected webhook: Malformed X-PseudoGram-Signature header format: {x_pseudogram_signature}")
+            logger.warning("Rejected webhook: Malformed X-PseudoGram-Signature header format.")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Malformed signature header")
 
         expected_sig = "sha256=" + hmac.new(settings.API_KEY.encode('utf-8'), raw_body, hashlib.sha256).hexdigest()
         if not hmac.compare_digest(x_pseudogram_signature, expected_sig):
-            logger.warning(f"Rejected webhook mismatch. Recv: {x_pseudogram_signature} | Expected: {expected_sig} | KeyLen: {len(settings.API_KEY)}")
+            logger.warning("Rejected webhook mismatch.")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid signature")
 
     try:
