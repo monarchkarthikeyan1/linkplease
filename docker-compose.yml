@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PSEUDOGRAM_BASE_URL=https://pseudogram-api.onrender.com
+      - PSEUDOGRAM_API_KEY=${PSEUDOGRAM_API_KEY}
+      - DB_PATH=linkplease.db
+      - VERIFY_WEBHOOK_SIGNATURE=true
+    volumes:
+      - ./data:/app/data
