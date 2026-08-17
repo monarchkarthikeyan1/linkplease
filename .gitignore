@@ -1,25 +1,9 @@
-# Virtual Environment
-venv/
-.venv/
-env/
-
-# Environment Variables & Secrets
 .env
-*.env
-
-# SQLite Databases
+.new_secret
 *.db
 *.db-wal
 *.db-shm
-
-# Python Cache & Bytecode
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
+venv/
 .pytest_cache/
-
-# IDE & OS
-.DS_Store
-.vscode/
-.idea/
